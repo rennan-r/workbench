@@ -2,6 +2,7 @@ import os
 
 
 class AppConfig:
+    WUS_URL = os.getenv("WUS_URL")
     MYSQL_URL = os.getenv("MYSQL_URL")
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://" + MYSQL_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -4,7 +4,10 @@ from app import db
 
 class APIResource(Resource):
 
-    def get_one(self, filter, param):
+    def get_one(self, field, filters=[]):
+        return db.session.query(*field).filter(*filters).first()
+
+    def get_all_one(self, filter, param):
         return self.model.query.filter(filter == param).first()
 
     # 增加单个操作
@@ -25,14 +28,16 @@ class APIResource(Resource):
         db.session.commit()
 
     # 展示全部
-    def query_select(self, field, filters=[]):
-        data = db.session.query(*field).filter(*filters).all()
+    def query_select(self, field, filters=[], order=[]):
+        data = db.session.query(*field).filter(*filters).order_by(*order)
 
-        return data
+        return data.all()
 
     # 查询搜索(分页)
-    def query_page(self, field, filters: list = [], page: int = 1, per_page: int = 15) -> tuple:
-        collects = db.session.query(*field).filter(*filters).paginate(
+    def query_page(self, field, filters: list = [], page: int = 1, per_page: int = 15, order: list = []) -> tuple:
+        collects = db.session.query(*field).filter(*filters).order_by(*order)
+
+        collects = collects.paginate(
             page=page,
             per_page=per_page)
         return collects.items, {"pages": collects.pages, "total": collects.total}

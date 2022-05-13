@@ -1,7 +1,7 @@
 from app import db
 
 
-# flask-sqlacodegen mysql+pymysql://root:ztac123456@192.168.99.100:3003/wus --flask
+
 
 
 class CollectClas(db.Model):

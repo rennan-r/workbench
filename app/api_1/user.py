@@ -21,16 +21,18 @@ class UserLogin(APIResource):
         "password": {"type": str, "required": True}
     })
     def post(self, username, password):
-        user = self.get_one(User.username, username)
-        if not user or user.password != Encryption.md5_encryption(password):
+        user = self.get_one([self.model.u_id, self.model.password, self.model.username], [self.model.username == username])
+        if not user:
             # 用户存在或者用户名密码错误
+            raise ApiException(*UserConstant.USER_PWD_ERROR)
+        if user["password"] != Encryption.md5_encryption(password):
             raise ApiException(*UserConstant.USER_PWD_ERROR)
         data = {
             "token": Encryption.jwt_encode({
-                "u_id": user.u_id
+                "u_id": user["u_id"]
             }),
             "user": {
-                "username": user.username,
+                "username": user["username"],
             },
             "expireAt": 1 / 8
         }

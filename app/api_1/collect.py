@@ -20,7 +20,7 @@ class CollectEt(APIResource):
         "is_top": {"type": int, "required": True},
     })  # 添加搜藏条目
     def post(self, title, introduction, content, markdown, c_class, is_top):
-        if self.get_one(self.model.title, title):
+        if self.get_one([self.model.id], [self.model.title == title]):
             raise ApiException(*CollectConstant.REPEAT_ET)
         self.increase_one(id=Common.get_a_uuid(), title=title, introduction=introduction,
                           content=content, markdown=markdown,
@@ -105,7 +105,7 @@ class CollectClass(APIResource):
         "class_name": {"type": str, "required": True}
     })  # 添加分类
     def post(self, class_name):
-        if self.get_one(self.model.class_name, class_name):
+        if self.get_one([self.model.id], [self.model.class_name == class_name]):
             raise ApiException(*CollectConstant.REPEAT_CLASS)
         c_id = Common.get_a_uuid()
         print(c_id)

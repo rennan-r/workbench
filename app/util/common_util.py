@@ -1,6 +1,8 @@
 import uuid
 import datetime
 
+from app.conf.app_config import AppConfig
+
 
 class Common:
 
@@ -64,6 +66,7 @@ class Common:
         elif not isinstance(value, dict):
             raise ValueError(name + '参数类型错误，必须是dict类型')
         return value
+
     @staticmethod
     def json_type(value, name):
         '''
@@ -71,9 +74,29 @@ class Common:
         :param name:  字段
         :return:
         '''
-        print(value)
         if not value:
             return []
         elif not isinstance(value, list):
             raise ValueError(name + '参数类型错误，必须是list类型')
         return value
+
+    @staticmethod
+    def github_time_format(time):
+        '''
+        :param time:  github时间
+        :return:
+        '''
+        if not time:
+            return ""
+
+        return time[:-1].replace("T", " ")
+
+    @staticmethod
+    def github_hook_url(name):
+        '''
+        :return:
+        '''
+        perfix = "http://"
+        format_str = "/project/{}/commit".format(name)
+
+        return perfix + AppConfig.WUS_URL + format_str

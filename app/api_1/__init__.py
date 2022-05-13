@@ -10,7 +10,6 @@ from app.lib.constant import UserConstant, defult
 from app.util.encryption_util import Encryption
 
 
-
 @app.before_request
 def verify_token():
     if request.path not in Configure.white_token:
